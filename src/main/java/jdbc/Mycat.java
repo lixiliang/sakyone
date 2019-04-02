@@ -1,12 +1,13 @@
 package jdbc;
 
 import java.sql.*;
+import java.util.concurrent.TimeUnit;
 
 public class Mycat {
 
     public static final String driver = "com.mysql.jdbc.Driver";
-    public static final String url = "jdbc:mysql://10.10.50.127:8066/saofu?user=dev&password=yunnex&useUnicode=true&characterEncoding=UTF8";
-//    public static final String url = "jdbc:mysql://192.168.10.236:8086/testdb?user=mycat&password=123456&useUnicode=true&characterEncoding=UTF8";
+//    public static final String url = "jdbc:mysql://10.10.50.127:8066/saofu?user=dev&password=yunnex&useUnicode=true&characterEncoding=UTF8";
+    public static final String url = "jdbc:mysql://192.168.10.236:8066/db1?user=mycat&password=123456&useUnicode=true&characterEncoding=UTF8";
 
     public Connection conn = null;
     public PreparedStatement pst = null;
@@ -54,7 +55,10 @@ public class Mycat {
     }
 
 
-    public static void main(String[] args) {
-        new Mycat().select();
+    public static void main(String[] args) throws InterruptedException {
+        while (true){
+            new Mycat().select();
+            TimeUnit.SECONDS.sleep(1);
+        }
     }
 }  
