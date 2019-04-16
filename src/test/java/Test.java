@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -208,9 +210,29 @@ public class Test {
     }
     @org.junit.Test
     public void test09(){
-
+        String url = "/10549840601068216320";
+        String url2 = "/cardcc/101012345678901234567111/";
+        String url3 = "/cardcc/101012345678901234567111cc/abc";
+//        String serialUrlRegex  = "(.+/)([\\d]{20,})";
+        String serialUrlRegex  = "(.+/)(10[\\d]{18,})(/*)(.*)";
+        Pattern p = Pattern.compile(serialUrlRegex);
+        Matcher matcher = p.matcher(url);
+        if (matcher.matches()) {
+            System.out.println("url:"+matcher.group(2));
+        }
+        Matcher matcher2 = p.matcher(url2);
+        if (matcher2.matches()) {
+            System.out.println("url2:"+matcher2.group(2));
+        }
+        Matcher matcher3 = p.matcher(url3);
+        if (matcher3.matches()) {
+            System.out.println("url3:"+matcher3.group(2));
+        }
     }
-
+    @org.junit.Test
+    public void test10(){
+        System.out.println(System.currentTimeMillis());
+    }
 
 
 }
