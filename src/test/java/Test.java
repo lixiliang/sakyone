@@ -128,6 +128,7 @@ public class Test {
         List<Entity> list = Arrays.asList(e1,e2,e3);
         List<Entity> list2 = list.stream().filter((e) -> !e.getName().equals("a1") && !e.getText().equals("t2")).collect(Collectors.toList());
         System.out.println(list2);
+        System.out.println(list);
     }
     @org.junit.Test
     public void test03(){
