@@ -165,4 +165,8 @@ public class Digest {
 		}
 	}
 
+	public static void main(String[] args) {
+		System.out.println(Digest.signMD5("tvbc2017"));
+	}
+
 }

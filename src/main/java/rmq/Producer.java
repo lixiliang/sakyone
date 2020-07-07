@@ -1,11 +1,11 @@
 package rmq;
 
-import com.rabbitmq.client.*;
-import com.sun.deploy.util.StringUtils;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
-import java.lang.String;
-import java.lang.System;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -60,7 +60,7 @@ public class Producer {
 
                 while (GetInputString()) {
                     //input like : info message
-                    String[] temp = StringUtils.splitString(message, " ");
+                    String[] temp = org.apache.commons.lang3.StringUtils.split(message, " ");
                     channel.basicPublish(XCHG_NAME, temp[0], null, temp[1].getBytes());
                     System.out.println("Send " + message);
                 }
@@ -71,7 +71,7 @@ public class Producer {
                 channel.exchangeDeclare(XCHG_NAME, "topic", true, true, null);
                 while (GetInputString()) {
                     //input like : topic message
-                    String[] temp = StringUtils.splitString(message, " ");
+                    String[] temp = org.apache.commons.lang3.StringUtils.split(message, " ");
                     channel.basicPublish(XCHG_NAME, temp[0], null, temp[1].getBytes());
                     System.out.println("Send " + message);
                 }
@@ -82,7 +82,7 @@ public class Producer {
                 channel.exchangeDeclare(XCHG_NAME, "headers", true, true, null);
                 while (GetInputString()) {
                     //input like : headers message
-                    String[] temp = StringUtils.splitString(message, " ");
+                    String[] temp = org.apache.commons.lang3.StringUtils.split(message, " ");
 
                     Map<String, Object> headers = new HashMap<String, Object>();
                     headers.put("name", temp[0]); //定义headers
