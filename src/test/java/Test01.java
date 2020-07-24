@@ -218,16 +218,16 @@ public class Test01 {
     }
     @Test
     public void test12(){
-        Date dataTime = new Date();
-        System.out.println(DateUtils.getWeek(dataTime));
-        String beginStr = DateUtils.dateToString(dataTime,"yyyyMMdd");
-        log.info("{}",DateUtils.stringToDate(beginStr,"yyyyMMdd"));
+
+
     }
     @Test
     public void test13(){
         Date dataTime = new Date();
-        String beginStr = DateUtils.dateToString(dataTime,"yyyyMM");
-        log.info("{}",DateUtils.stringToDate(beginStr,"yyyyMM"));
+        Date a = DateUtils.stringToDate("2020-07-15 11:54:58");
+        Date b = DateUtils.stringToDate("2020-06-25 01:25:15");
+        int days = DateUtils.compareDays(a,b);
+        log.info("diff day:{}",days);
     }
     @Test
     public void test14(){
@@ -257,6 +257,10 @@ public class Test01 {
         Date d = new Date(t);
         Assert.assertTrue(t==f);
         Assert.assertTrue(t.equals(f));
+
+    }
+
+    public void test18(){
 
     }
 }

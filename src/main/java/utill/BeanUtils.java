@@ -8,15 +8,16 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.beans.BeanUtils.getPropertyDescriptors;
-import static org.springframework.beans.BeanUtils.instantiateClass;
 
 /**
- * 注意 bean 如果是用lombok 工具生成的，不可以加上@Accessors(chain = true)
+ * @author Lius
+ * @date 2018/10/26 13:37
+ * @describe 实体工具类，
  */
-public class BeanMapUtils {
-    public BeanMapUtils() {
+public class BeanUtils extends org.springframework.beans.BeanUtils {
+    public BeanUtils() {
     }
+
     /**
      * 实例化对象：传入类对类进行实例化对象
      *
@@ -53,7 +54,7 @@ public class BeanMapUtils {
      * @author Lius
      * @date 2018/10/26 14:08
      */
-    public static Map beanToMap(Object src) {
+    public static Map toMap(Object src) {
         return BeanMap.create(src);
     }
 
@@ -63,7 +64,7 @@ public class BeanMapUtils {
      * @author Lius
      * @date 2018/10/26 14:09
      */
-    public static <T> T mapToBean(Map<String, ? extends Object> beanMap, Class<T> valueType) {
+    public static <T> T toBean(Map<String, ? extends Object> beanMap, Class<T> valueType) {
         // 对象实例化
         T bean = BeanUtils.newInstance(valueType);
         PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(valueType);
@@ -92,8 +93,8 @@ public class BeanMapUtils {
         return bean;
     }
 
-
     public static void main(String[] args) {
+        // Map To Bean
         PapOrderResult result = new PapOrderResult();
         Map<String, String> resp = new HashMap<>();
         resp.put("mch_id","1111");
@@ -101,7 +102,14 @@ public class BeanMapUtils {
         resp.put("trade_state","ACEPT");
         result = BeanMapUtils.mapToBean(resp, PapOrderResult.class);
         System.out.println(result);
-        resp = BeanMapUtils.beanToMap(result);
+
+
+         result = toBean(resp, PapOrderResult.class);
+        System.out.println(result);
+
+
+        resp = toMap(result);
         System.out.println(resp);
     }
+
 }

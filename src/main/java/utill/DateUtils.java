@@ -234,6 +234,14 @@ public class DateUtils {
         }
     }
 
+    public static int compareDays(String startTime, String endTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return compareDays(sdf.parse(startTime), sdf.parse(endTime));
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
     /**
      * @param @param dBegin
      * @param @param dEnd
