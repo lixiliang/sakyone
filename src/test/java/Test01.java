@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import utill.DateUtils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,15 +23,31 @@ import java.util.concurrent.TimeUnit;
 public class Test01 {
 
     @Test
-    public void test1() {
-        List<Integer> list = Lists.newArrayList(1, 2, 3);
-        list.removeIf(i -> i == 2);
-        System.out.println(list);
-        Integer i = 1;
-        if (null == i) {
-            System.out.println("111");
+    public void test1() throws IOException {
+        log.info("主线程开始...");
+        try {
+            CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
+                log.info("async线程执行");
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+//                    int i = 1/0;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return 123;
+            }).thenAccept((t)->{
+                log.info("anoth thread 再执行"+t);
+                throw new NumberFormatException("sss");
+            }).exceptionally(throwable -> {
+                log.error("error thread", throwable);
+                return null;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        log.info("主线程结束...");
+        System.in.read();
     }
 
     @Test
@@ -244,7 +261,7 @@ public class Test01 {
 
     @Test
     public void test16(){
-        long t = 1589824663000L;
+        long t = 1597210971883L;
         Date d = new Date(t);
         System.out.println(DateUtils.dateToString(d));
 
@@ -252,6 +269,7 @@ public class Test01 {
     }
     @Test
     public void test17(){
+        log.info(DateUtils.getWeek(new Date()));
         Integer t = 12;
         Integer f = 12;
         Date d = new Date(t);
@@ -259,8 +277,23 @@ public class Test01 {
         Assert.assertTrue(t.equals(f));
 
     }
-
+    @Test
     public void test18(){
+        int target = 0;
+        int randomNumber = (int)(Math.random() * (target+1));
+        while (randomNumber < target){
 
+            randomNumber = (int)(Math.random() * (target+1));
+        }
+        log.info("rand:{}",randomNumber);
+    }
+
+    @Test
+    public void test19(){
+      Map<String ,Object> map = Maps.newHashMap();
+      map.put("a",null);
+        map.put("b",1);
+        map.put("b",null);
+      log.info("{}",map);
     }
 }

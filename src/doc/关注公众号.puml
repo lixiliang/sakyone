@@ -1,0 +1,26 @@
+@startuml
+
+autonumber
+actor "用户" as user
+participant "埋堆堆APP" as mdd_app
+participant "微信APP" as wx_app
+participant "埋堆堆服务端" as bss_server
+participant "消息队列" as mq
+database "业务DB" as bss_db
+participant "微信服务端" as wx_server
+activate user
+user -> mdd_app: 点击关注公众号
+mdd_app -> bss_server:request:关注公众号接口(公众号id)
+activate bss_server #DarkSalmon
+bss_server->wx_server: 生成临时二维码(带memberUuid+missionUuid)
+bss_server->mdd_app: 二维码url
+deactivate bss_server
+user-> wx_app:识别二维码，跳转到微信
+user->wx_app:关注公众号
+deactivate user
+activate bss_server #DarkSalmon
+wx_server-->bss_server: 接收用户关注成功的消息(openid+带的数据)
+bss_server->bss_db: 记录用户关注记录
+bss_server ->mq:上报任务数据(判断是否有任务id)
+deactivate bss_server
+@enduml

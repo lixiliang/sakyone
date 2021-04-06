@@ -1,0 +1,40 @@
+@startuml
+title 任务中心时序图
+autonumber
+actor "用户" as user
+actor "运营人员" as mdd_admin
+participant "埋堆堆APP" as mdd_app
+participant "业务服务" as bss_server
+participant "消息队列" as mq
+participant "任务中心服务" as mission_server
+participant "推送服务" as push
+database "业务DB" as bss_db
+database "任务中心DB" as mission_db
+
+mdd_admin->mission_db: 创建并上线任务
+user->mdd_app: 用户执行任务指定的动作\n(用户无需手动领取任务)
+activate mdd_app #FFBBCC
+mdd_app->bss_server:提交业务数据
+bss_server->bss_db:完成原业务逻辑
+activate bss_server #DarkSalmon
+autonumber 4.1
+alt bss in Action
+  bss_server--> mq: 上报用户动作数据
+  note right: must make sure success
+end
+deactivate bss_server
+deactivate mdd_app
+autonumber 5
+mq -> mission_server:消费动作数据
+activate mission_server #DarkSalmon
+mission_server ->mission_db: 落地用户动作明细数据
+group 任务核心逻辑
+mission_server<--mission_server: 任务核心逻辑(详细见流程图)\n input：任务配置数据+动作数据\n output：任务进度+任务状态+奖励(自动发放/手工领取)
+mission_server --> push:任务完成或奖励信息推送
+deactivate mission_server
+push --> mdd_app: 接收推送消息
+mdd_app ->user: 展示任务或奖励信息
+user -> mdd_app:领奖
+end
+
+@enduml

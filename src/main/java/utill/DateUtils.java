@@ -29,6 +29,8 @@ public class DateUtils {
     public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     public static String DEADLINE_STR = " 23:59:59";
 
+    private static SimpleDateFormat sf = null;
+
     public static String dateToSimpleStringYYYYMMDD(Date time) {
         return dateToString(time, YYYYMMDD);
     }
@@ -59,6 +61,25 @@ public class DateUtils {
 
         return string;
     }
+    public static Long timeFor8BitNum(Date date) {
+        return Long.parseLong(dateToString(date, YYYYMMDD));
+    }
+    public static Date num8BitToDate(Long num8Bit) {
+        return stringToDate(num8Bit.toString(),YYYYMMDD);
+    }
+    public static Date num14BitToDate(Long num14Bit) {
+        return stringToDate(num14Bit.toString(),YYYYMMDDHHMMSS);
+    }
+    public static Long timeFor14BitNum(Date date) {
+        return Long.parseLong(dateToString(date, YYYYMMDDHHMMSS));
+    }
+    public static Long nowFor8BitNum() {
+        return Long.parseLong(dateToString(new Date(), YYYYMMDD));
+    }
+
+    public static Long nowFor14BitNum() {
+        return Long.parseLong(dateToString(new Date(), YYYYMMDDHHMMSS));
+    }
 
     public static String dateToString(Date time, String format) {
         if (null == time) {
@@ -67,8 +88,21 @@ public class DateUtils {
         SimpleDateFormat formatter;
         formatter = new SimpleDateFormat(format);
         String string = formatter.format(time);
-
         return string;
+    }
+
+    public static String getDateToString(long time) {
+        Date d = new Date(time);
+        sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sf.format(d);
+
+    }
+
+    public static String getDateToString(long time, String format) {
+        Date d = new Date(time);
+        sf = new SimpleDateFormat(format);
+        return sf.format(d);
+
     }
 
     /**
@@ -88,6 +122,7 @@ public class DateUtils {
         c.add(Calendar.MONTH, num);
         return c.getTime();
     }
+
     /**
      * 将当前传入的时间 基础上 增加 num个星期
      *
@@ -143,6 +178,7 @@ public class DateUtils {
         c.add(Calendar.HOUR_OF_DAY, num);
         return c.getTime();
     }
+
     /**
      * 将当前传入的时间 基础上 增加 num 秒
      *
@@ -234,14 +270,6 @@ public class DateUtils {
         }
     }
 
-    public static int compareDays(String startTime, String endTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            return compareDays(sdf.parse(startTime), sdf.parse(endTime));
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
     /**
      * @param @param dBegin
      * @param @param dEnd
@@ -468,11 +496,13 @@ public class DateUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        SimpleDateFormat sdf2 = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS);
-        Date de = getDeadLine(new Date());
+//        SimpleDateFormat sdf2 = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS);
+//        Date de = getDeadLine(new Date());
+//
+//        List<DateResultInfo> betweenDate = DateUtils.getDateResultInfoBetweenDate(new Date(), sdf2.parse("2020-01-01 " + " 11:22:00"));
+//        List<DateResultInfo> statistics = DateUtils.statisticsOfCrossWeekDuration(new Date(), sdf2.parse("2020-01-01 " + " 11:22:00"));
 
-        List<DateResultInfo> betweenDate = DateUtils.getDateResultInfoBetweenDate(new Date(), sdf2.parse("2020-01-01 " + " 11:22:00"));
-        List<DateResultInfo> statistics = DateUtils.statisticsOfCrossWeekDuration(new Date(), sdf2.parse("2020-01-01 " + " 11:22:00"));
+        System.out.println(stringToDate("2020-09-18", YYYY_MM_DD));
     }
 
     public static String getCycleSuffix(Date date, int cycleType) {
