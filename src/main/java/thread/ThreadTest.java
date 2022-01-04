@@ -3,6 +3,8 @@ package thread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -10,6 +12,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class ThreadTest {
     private static Logger logger = LoggerFactory.getLogger(ThreadTest.class);
+    static List<String> list = Arrays.asList("1","2");
 
     public static void main(String[] args) throws InterruptedException {
         logger.info("aaaa");
@@ -22,6 +25,7 @@ public class ThreadTest {
         };
 
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
                     latch.await();

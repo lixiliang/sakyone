@@ -58,8 +58,9 @@ public class SqlFile {
             ,"ps_live_gift_history");
 
     public static void main(String[] args) throws IOException {
-        String dir = "e:/tmp/";
-        String fileName = "29.sql";
+//        String dir = "e:/tmp/master/";
+        String dir = "g:/tmp/slave-api/";
+        String fileName = "28.sql";
         File file = new File(dir+fileName);
 //        List<String> lines = FileUtils.readLines(file,"UTF-8");
         List<String> sqls = Lists.newArrayList();
@@ -67,15 +68,41 @@ public class SqlFile {
         LineIterator it = null;
         try {
             it = FileUtils.lineIterator(file, "UTF-8");
+            String sql = "";
             while (it.hasNext()){
                 String line = it.nextLine();
+                //带“开头的sql
                 int first = line.indexOf("\"");
                 if(first < 0){
+//                    continue;
+                    //不带“
+                    String beginStr=",mdd,";
+                    String endStr=",172.";
+                    first = line.indexOf(beginStr);
+                    if(first <0){
+                        continue;
+                    }
+                    int end = line.lastIndexOf(endStr);
+                    if(end < 0){
+                        endStr = ",14.";
+                        end = line.lastIndexOf(endStr);
+                    }
+                    if(end < 0){
+                        endStr = ",42.";
+                        end = line.lastIndexOf(endStr);
+                    }
+                    sql = line.substring(first+beginStr.length(),end);
+                }else {
+                    continue;
+//                    sql = line.substring(first+1,line.lastIndexOf("\""));
+                }
+    //            log.info(sql);
+                if(StringUtils.isBlank(sql)){
+//                    log.info("empty sql");
                     continue;
                 }
-                String sql = line.substring(first+1,line.lastIndexOf("\""));
-    //            log.info(sql);
                 List<String> tables = SqlParser.parseTable(sql);
+                tables = removePrefix(tables);
                 boolean contains = tables.stream().anyMatch(t-> TARGET_TABLES.contains(t));
                 String tkeys = StringUtils.join(tables,",");
                 if(contains){
@@ -115,6 +142,22 @@ public class SqlFile {
         });
 //        sqls.forEach(sql->log.info("sql:{}",sql));
 //        sqls.forEach(System.out::println);
+    }
+
+    private static List<String> removePrefix(List<String> tables) {
+        List<String> result = Lists.newArrayListWithCapacity(tables.size());
+        for (String t:tables){
+            int ind = t.indexOf("`mdd`.");
+            if(ind > -1){
+                t = t.replaceFirst("`mdd`.","");
+            }
+            int ind2 = t.indexOf("mdd.");
+            if(ind2 > -1){
+                t = t.replaceFirst("mdd.","");
+            }
+            result.add(t);
+        }
+        return result;
     }
 
     public static void writeText(String filePath, String content) {

@@ -38,7 +38,11 @@ public class DateUtils {
     public static Date getDeadLine(Date time) {
         return DateUtils.stringToDate(dateToString(time, YYYY_MM_DD) + DEADLINE_STR);
     }
-
+    public static String getTimeShort(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        String dateString = formatter.format(date);
+        return dateString;
+    }
 
     public static String dateToSimpleString(Date time) {
         if (null == time) {

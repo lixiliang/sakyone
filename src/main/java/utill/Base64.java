@@ -407,7 +407,14 @@ public class Base64 {
     public static byte[] encode(byte[] pArray) {
         return encodeBase64(pArray, false);
     }
-
+    public static String encodeStr(byte[] pArray) {
+        String str = "";
+        try {
+            str = encode(new String(pArray,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+        }
+        return str;
+    }
     public static String encode(String str) throws UnsupportedEncodingException {
         String baseStr = new String(encode(str.getBytes("UTF-8")));
         String tempStr = Digest.digest(str).toUpperCase();

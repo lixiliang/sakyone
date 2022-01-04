@@ -2,6 +2,7 @@ package druid;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.visitor.ParameterizedOutputVisitorUtils;
 import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
 import com.alibaba.druid.stat.TableStat;
 import com.alibaba.druid.util.JdbcConstants;
@@ -43,160 +44,10 @@ public class SqlParser {
 
     public static void main(String[] args) {
 //        String sql = "SELECT count(0) from( SELECT 1 FROM customer_Member cm INNER JOIN customer c on cm.id=c.member_id INNER JOIN customer_account ca ON c.id = ca.customer_id WHERE cm.shop_id= ? AND cm.member_group_id in ( ? ) )aa;";
-        String sql = "SELECT\n" +
-                "  uuid,\n" +
-                "  post_uuid,\n" +
-                "  content,\n" +
-                "  image_array,\n" +
-                "  cover_img,\n" +
-                "  video_url,\n" +
-                "  audio_url,\n" +
-                "  audio_time,\n" +
-                "  status,\n" +
-                "  num,\n" +
-                "  member_uuid,\n" +
-                "  member_name,\n" +
-                "  member_image,\n" +
-                "  approve_time,\n" +
-                "  create_time,\n" +
-                "  comment_num,\n" +
-                "  seq,\n" +
-                "  like_num,\n" +
-                "  def_like_num,\n" +
-                "  comment_type,\n" +
-                "  comment_uuid,\n" +
-                "  comment_member_uuid,\n" +
-                "  comment_member_name,\n" +
-                "  comment_member_image,\n" +
-                "  content_type,\n" +
-                "  source_uuid,\n" +
-                "  is_trans,\n" +
-                "  data_type,\n" +
-                "  article_uuid,\n" +
-                "  article_title,\n" +
-                "  vod_uuid,\n" +
-                "  vod_name,\n" +
-                "  service_uuid,\n" +
-                "  service_name,\n" +
-                "  topic_uuid,\n" +
-                "  topic_name,\n" +
-                "  head_image,\n" +
-                "  nick_name,\n" +
-                "  duration,\n" +
-                "  size,\n" +
-                "  is_top,\n" +
-                "  is_selected,\n" +
-                "  width,\n" +
-                "  height,\n" +
-                "  is_sync_image,\n" +
-                "  top_seq,\n" +
-                "  point_num,\n" +
-                "  is_at,\n" +
-                "  first_level_uuid,\n" +
-                "  second_level_uuid,\n" +
-                "  level,\n" +
-                "  sub_num,\n" +
-                "  last_modify_time,\n" +
-                "  is_del,\n" +
-                "  del_user,\n" +
-                "  image_resolution_ratio,\n" +
-                "  down_image,\n" +
-                "  face_url,\n" +
-                "  face_uuid\n" +
-                "FROM\n" +
-                "  (\n" +
-                "    SELECT\n" +
-                "      uuid,\n" +
-                "      post_uuid,\n" +
-                "      content,\n" +
-                "      image_array,\n" +
-                "      cover_img,\n" +
-                "      video_url,\n" +
-                "      audio_url,\n" +
-                "      audio_time,\n" +
-                "      status,\n" +
-                "      num,\n" +
-                "      member_uuid,\n" +
-                "      member_name,\n" +
-                "      member_image,\n" +
-                "      approve_time,\n" +
-                "      create_time,\n" +
-                "      comment_num,\n" +
-                "      seq,\n" +
-                "      like_num,\n" +
-                "      def_like_num,\n" +
-                "      comment_type,\n" +
-                "      comment_uuid,\n" +
-                "      comment_member_uuid,\n" +
-                "      comment_member_name,\n" +
-                "      comment_member_image,\n" +
-                "      content_type,\n" +
-                "      source_uuid,\n" +
-                "      is_trans,\n" +
-                "      data_type,\n" +
-                "      article_uuid,\n" +
-                "      article_title,\n" +
-                "      vod_uuid,\n" +
-                "      vod_name,\n" +
-                "      service_uuid,\n" +
-                "      service_name,\n" +
-                "      topic_uuid,\n" +
-                "      topic_name,\n" +
-                "      head_image,\n" +
-                "      nick_name,\n" +
-                "      duration,\n" +
-                "      size,\n" +
-                "      is_top,\n" +
-                "      is_selected,\n" +
-                "      width,\n" +
-                "      height,\n" +
-                "      is_sync_image,\n" +
-                "      top_seq,\n" +
-                "      point_num,\n" +
-                "      is_at,\n" +
-                "      first_level_uuid,\n" +
-                "      second_level_uuid,\n" +
-                "      level,\n" +
-                "      sub_num,\n" +
-                "      last_modify_time,\n" +
-                "      is_del,\n" +
-                "      del_user,\n" +
-                "      image_resolution_ratio,\n" +
-                "      down_image,\n" +
-                "      face_url,\n" +
-                "      face_uuid,\n" +
-                "      (\n" +
-                "        case\n" +
-                "          when post_uuid = @post_uuid then @num: = @num + 1\n" +
-                "          else @num: = 1\n" +
-                "        end\n" +
-                "      ) AS row_number,\n" +
-                "      (@post_uuid: = post_uuid)\n" +
-                "    FROM\n" +
-                "      mdd.ps_post_comment force index(ind_post_pointNum_createTime),(\n" +
-                "        select\n" +
-                "          @num: = 0,\n" +
-                "          @post_uuid: = ''\n" +
-                "      ) as q\n" +
-                "    WHERE\n" +
-                "      is_del = 0\n" +
-                "      and comment_type = 0\n" +
-                "      and is_trans = 1\n" +
-                "      and status = 1\n" +
-                "      and point_num >= 50\n" +
-                "      and post_uuid in (\n" +
-                "        'd8c6ab8613984599b798abb53303124d',\n" +
-                "        '75f95bc9a8004b77a088100905602727',\n" +
-                "        '37e7bb40299c4949a66b75b96d0f9e5f'\n" +
-                "      )\n" +
-                "    ORDER BY\n" +
-                "      post_uuid desc,\n" +
-                "      point_num DESC,\n" +
-                "      create_time ASC\n" +
-                "  ) AS T\n" +
-                "WHERE\n" +
-                "  row_number = 1";
+        String sql = "SELECT uuid, post_uuid, content, image_array, cover_img, video_url, audio_url, audio_time, status, num, member_uuid, member_name, member_image, approve_time, create_time, comment_num, seq, like_num, def_like_num, comment_type, comment_uuid, comment_member_uuid, comment_member_name, comment_member_image, content_type, source_uuid, is_trans, data_type, article_uuid, article_title, vod_uuid, vod_name, service_uuid, service_name, topic_uuid, topic_name, head_image, nick_name, duration, size, is_top, is_selected, width, height, is_sync_image, top_seq, point_num, is_at, first_level_uuid, second_level_uuid, level, sub_num, last_modify_time, is_del, del_user,image_resolution_ratio,down_image,face_url,face_uuid FROM (SELECT uuid, post_uuid, content, image_array, cover_img, video_url, audio_url, audio_time, status, num, member_uuid, member_name, member_image, approve_time, create_time, comment_num, seq, like_num, def_like_num, comment_type, comment_uuid, comment_member_uuid, comment_member_name, comment_member_image, content_type, source_uuid, is_trans, data_type, article_uuid, article_title, vod_uuid, vod_name, service_uuid, service_name, topic_uuid, topic_name, head_image, nick_name, duration, size, is_top, is_selected, width, height, is_sync_image, top_seq, point_num, is_at, first_level_uuid, second_level_uuid, level, sub_num, last_modify_time, is_del, del_user,image_resolution_ratio,down_image,face_url,face_uuid , (@num:=case when @comment_uuid=comment_uuid then @num + 1 else 1 end )AS row_number, (@comment_uuid:=comment_uuid) AS dummy FROM mdd.ps_post_comment ,(select @num:=0,@comment_uuid:='') as q WHERE is_del = 0 and comment_type=1 and is_trans = 1 and is_del = 0 and status=1 and point_num>=50 and comment_uuid in ('2f3a821060084570b251d6be225b3b89','26f52a827bbe4efb91115b90e7f67a61','9fa2acfc6a1540eb9c143beeaf94fd5d') ORDER BY comment_uuid desc, point_num DESC , create_time ASC) AS T WHERE row_number = 1";
         List<String> tables = SqlParser.parseTable(sql);
         System.out.println(tables);
+        String psql = ParameterizedOutputVisitorUtils.parameterize(sql, JdbcConstants.MYSQL).toLowerCase();
+        System.out.println(psql);
     }
 }

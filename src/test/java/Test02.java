@@ -13,9 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import utill.DateUtils;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -24,45 +22,40 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class Test01 {
+public class Test02 {
 
-    @Test
-    public void test1() throws IOException {
-        log.info("主线程开始...");
-        try {
-            CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
-                log.info("async线程执行");
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-//                    int i = 1/0;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return 123;
-            }).thenAccept((t)->{
-                log.info("anoth thread 再执行"+t);
-                throw new NumberFormatException("sss");
-            }).exceptionally(throwable -> {
-                log.error("error thread", throwable);
-                return null;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        log.info("主线程结束...");
-        System.in.read();
-    }
 
     @Test
     public void test3() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date vipEndDate = sdf.parse("2020-01-31");
-        Date d2 = sdf.parse("2020-02-29");
-        int days = DateUtils.compareDays(vipEndDate, d2);
-        System.out.println(days);
+        Date vipEndTime = DateUtils.stringToDate("2021-11-30 23:59:59");
+        Date entrustTime = DateUtils.stringToDate("2020-11-28 06:38:07");
+        Date result = calculateRenewTime(vipEndTime,entrustTime);
+        System.out.println(DateUtils.dateToString(result));
+        Date v2 = DateUtils.stringToDate("2021-11-26 23:59:59");
+        result = calculateRenewTime(v2,entrustTime);
+        System.out.println(DateUtils.dateToString(result));
+
+        Date v3 = DateUtils.stringToDate("2021-11-28 23:59:59");
+        result = calculateRenewTime(v3,entrustTime);
+        System.out.println(DateUtils.dateToString(result));
     }
 
+    public Date calculateRenewTime(Date vipEndTime, Date entrustTime) {
+        Date now = new Date();
+        if(vipEndTime==null){
+            return now;
+        }
+        String daySeg = DateUtils.dateToString(DateUtils.addDay(vipEndTime, -1), DateUtils.YYYY_MM_DD);
+        String timeSeg = DateUtils.getTimeShort(entrustTime);
+        Date date = DateUtils.stringToDate(daySeg + " " + timeSeg);
+        Date renewTime = date;
+
+        if (renewTime.before(now)) {
+            //若应该续费的时间早于当前时间，可能由于其它原因错过续费时间，则需立刻进行续费
+            renewTime = now;
+        }
+        return renewTime;
+    }
 
 
     @Test
@@ -81,15 +74,10 @@ public class Test01 {
 
     @Test
     public void test5() {
-        String week = "2020W01";
-//        2019-12-30 15:21:18
-//        2020-01-05 15:21:18
-        Date[] d = DateUtils.getBeginAndEndDateOfWeek(week);
-        Date begin = new Date();
-        Date end = new Date();
+        for (int i = 0; i < 100; i++) {
+            System.out.println(i+"####"+System.currentTimeMillis() );
+        }
 
-        System.out.println(DateUtils.dateToString(d[0]));
-        System.out.println(DateUtils.dateToString(d[1]));
     }
 
     @Test
