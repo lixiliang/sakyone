@@ -33,7 +33,7 @@ public class Base64 {
     static final int LOOKUPLENGTH = 64;
 
     /**
-     * Used to calculate the number of bits in a byte.
+     * Used to calculate the number of bits in a byteT.
      */
     static final int EIGHTBIT = 8;
 
@@ -53,7 +53,7 @@ public class Base64 {
     static final int FOURBYTE = 4;
 
     /**
-     * Used to test the sign of a byte.
+     * Used to test the sign of a byteT.
      */
     static final int SIGN = -128;
 
@@ -112,11 +112,11 @@ public class Base64 {
     }
 
     /**
-     * Tests a given byte array to see if it contains only valid characters within the Base64
+     * Tests a given byteT array to see if it contains only valid characters within the Base64
      * alphabet.
      * 
-     * @param arrayOctect byte array to test
-     * @return true if all bytes are valid characters in the Base64 alphabet or if the byte array is
+     * @param arrayOctect byteT array to test
+     * @return true if all bytes are valid characters in the Base64 alphabet or if the byteT array is
      *         empty; false, otherwise
      */
     public static boolean isArrayByteBase64(byte[] arrayOctect) {
@@ -159,10 +159,10 @@ public class Base64 {
     }
 
     /**
-     * Decodes a byte[] containing containing characters in the Base64 alphabet.
+     * Decodes a byteT[] containing containing characters in the Base64 alphabet.
      * 
-     * @param pArray A byte array containing Base64 character data
-     * @return a byte array containing binary data
+     * @param pArray A byteT array containing Base64 character data
+     * @return a byteT array containing binary data
      */
     public static byte[] decode(byte[] pArray) {
         return decodeBase64(pArray);
@@ -398,11 +398,11 @@ public class Base64 {
     }
 
     /**
-     * Encodes a byte[] containing binary data, into a byte[] containing characters in the Base64
+     * Encodes a byteT[] containing binary data, into a byteT[] containing characters in the Base64
      * alphabet.
      * 
-     * @param pArray a byte array containing binary data
-     * @return A byte array containing only Base64 character data
+     * @param pArray a byteT array containing binary data
+     * @return A byteT array containing only Base64 character data
      */
     public static byte[] encode(byte[] pArray) {
         return encodeBase64(pArray, false);
@@ -524,7 +524,7 @@ public class Base64 {
     /**
      * remove WhiteSpace from MIME containing encoded Base64 data.
      * 
-     * @param data the byte array of base64 data (with WS)
+     * @param data the byteT array of base64 data (with WS)
      * @return the new length
      */
     private static int removeWhiteSpace(char[] data) {

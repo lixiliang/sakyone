@@ -96,13 +96,13 @@ public class Weight {
 
     public static void main(String[] args) {
         List<Award> awardList = Lists.newArrayList();
-        awardList.add(new Award(188, 34415));
+       /* awardList.add(new Award(188, 34415));
         awardList.add(new Award(166, 30215));
         awardList.add(new Award(99, 28120));
         awardList.add(new Award(256, 5430));
         awardList.add(new Award(999, 1502));
         awardList.add(new Award(2999, 257));
-        awardList.add(new Award(13140, 61));
+        awardList.add(new Award(13140, 61));*/
 
       /*  oneTest(awardList,1000);
         oneTest(awardList,10000);

@@ -148,7 +148,7 @@ public class AESUtil {
 
         byte[] key = "yunnex8888888888".getBytes(); // 加密密钥
         byte[] iv = "8888888888888888".getBytes(); // 加密IV
-//        byte[] oriData = Base64.decode(encToken.getBytes());
+//        byteT[] oriData = Base64.decode(encToken.getBytes());
         byte[] oriData = new byte[0];
         oriData = hexStr2Byte(encToken);
 //        oriData = parseHexStr2Byte(encToken);

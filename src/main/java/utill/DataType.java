@@ -138,7 +138,7 @@ public class DataType {
         if (type.equalsIgnoreCase("Long")) return "0";
         if (type.equalsIgnoreCase("Double")) return "0";
         if (type.equalsIgnoreCase("Float")) return "0";
-        if (type.equalsIgnoreCase("Byte")) return "((byte)0)";
+        if (type.equalsIgnoreCase("Byte")) return "((byteT)0)";
         if (type.equalsIgnoreCase("Char")) return "((char)0)";
         if (type.equalsIgnoreCase("Boolean")) return "false";
         if (type.equalsIgnoreCase("Date")) return "null";

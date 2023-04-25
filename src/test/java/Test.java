@@ -128,6 +128,7 @@ public class Test {
 
     @org.junit.Test
     public void testRound() {
+        String str="E:\\git\\gitlab\\Mdd_AppApi\\target\\mdd-api.jar";
         double i = 2.3000000000000003d;
         System.out.println(Math.round(i * 100) * 0.01d);
         String result = String.format("%.2f", i);
